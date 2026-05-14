@@ -1,0 +1,17 @@
+services:
+  opencode:
+    image: ghcr.io/almeidapaulopt/opencode-web:latest
+    container_name: opencode-web
+    command: ["web", "--hostname", "0.0.0.0", "--port", "4096"]
+    ports:
+      - "4096:4096"
+    environment:
+      - OPENCODE_SERVER_PASSWORD=${OPENCODE_SERVER_PASSWORD:-}
+    volumes:
+      - opencode-home:/home/opencode
+      - opencode-workspace:/home/opencode/workspace
+    restart: unless-stopped
+
+volumes:
+  opencode-home:
+  opencode-workspace:
