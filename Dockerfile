@@ -16,7 +16,7 @@ RUN apk add --no-cache bash git mise docker-cli openssh sudo \
  && echo 'PermitEmptyPasswords yes' >> /etc/ssh/sshd_config \
  && passwd -u opencode \
   && chown -R opencode:opencode /home/opencode \
-  && chsh -s /bin/bash opencode
+  && sed -i 's|/home/opencode:.*/bin/sh|/home/opencode:/bin/bash|' /etc/passwd
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
