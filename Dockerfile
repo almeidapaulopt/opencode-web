@@ -1,6 +1,6 @@
 FROM ghcr.io/anomalyco/opencode:latest
 
-RUN apk add --no-cache mise docker-cli openssh sudo \
+RUN apk add --no-cache git mise docker-cli openssh sudo \
  && adduser -D -u 1000 opencode \
  && mkdir -p /home/opencode/.local/state \
  && mkdir -p /home/opencode/.config/opencode \
@@ -15,7 +15,8 @@ RUN apk add --no-cache mise docker-cli openssh sudo \
  && echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config \
  && echo 'PermitEmptyPasswords yes' >> /etc/ssh/sshd_config \
  && passwd -u opencode \
- && chown -R opencode:opencode /home/opencode
+  && chown -R opencode:opencode /home/opencode \
+  && chsh -s /bin/bash opencode
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
