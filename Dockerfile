@@ -1,15 +1,26 @@
 FROM ghcr.io/anomalyco/opencode:latest
 
-RUN adduser -D -u 1000 opencode \
+RUN apk add --no-cache mise docker-cli openssh sudo \
+ && adduser -D -u 1000 opencode \
  && mkdir -p /home/opencode/.local/state \
  && mkdir -p /home/opencode/.config/opencode \
  && mkdir -p /home/opencode/.local/share/opencode \
+ && mkdir -p /home/opencode/.ssh \
  && mkdir -p /home/opencode/workspace \
- && apk add --no-cache mise \
+ && mkdir -p /run/sshd \
+ && ssh-keygen -A \
+ && echo 'opencode ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/opencode \
  && echo 'eval "$(mise activate bash)"' >> /home/opencode/.bashrc \
+ && echo 'eval "$(mise activate bash)"' >> /home/opencode/.profile \
+ && echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config \
+ && echo 'PermitEmptyPasswords yes' >> /etc/ssh/sshd_config \
+ && passwd -u opencode \
  && chown -R opencode:opencode /home/opencode
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 USER opencode
 WORKDIR /home/opencode/workspace
 
-ENTRYPOINT ["opencode"]
+ENTRYPOINT ["/entrypoint.sh"]
