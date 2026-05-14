@@ -35,6 +35,10 @@ RUN ARCH=$(dpkg --print-architecture) \
   && curl -fsSL "$URL" | tar -xz -C /usr/local/bin opencode \
   && chmod +x /usr/local/bin/opencode
 
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
+  && apt-get install -y nodejs \
+  && rm -rf /var/lib/apt/lists/*
+
 RUN curl -fsSL https://mise.run | bash \
   && cp /root/.local/bin/mise /usr/local/bin/mise \
   && echo 'eval "$(mise activate bash)"' >> /home/opencode/.bashrc \
