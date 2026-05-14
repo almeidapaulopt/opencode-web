@@ -1,6 +1,6 @@
 FROM ghcr.io/anomalyco/opencode:latest
 
-RUN apk add --no-cache bash gcompat git mise docker-cli openssh sudo \
+RUN apk add --no-cache bash gcompat git mise docker-cli neovim openssh sudo \
  && adduser -D -u 1000 opencode \
  && mkdir -p /home/opencode/.local/state \
  && mkdir -p /home/opencode/.config/opencode \
