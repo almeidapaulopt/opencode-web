@@ -82,7 +82,7 @@ jobs:
           tags: |
             type=raw,value=latest
             type=sha,prefix=
-            type=raw,value={{date `YYYYMMDD`}}
+            type=raw,value={{date 'YYYYMMDD'}}
 
       - name: Build and push
         uses: docker/build-push-action@v6
