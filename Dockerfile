@@ -17,8 +17,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && mkdir -p /home/opencode/workspace \
   && mkdir -p /run/sshd \
   && echo 'opencode ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/opencode \
-  && echo 'eval "$(mise activate bash)"' >> /home/opencode/.bashrc \
-  && echo 'eval "$(mise activate bash)"' >> /home/opencode/.profile \
   && echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config \
   && echo 'PermitEmptyPasswords yes' >> /etc/ssh/sshd_config \
   && passwd -d opencode \
@@ -41,6 +39,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
 
 RUN curl -fsSL https://mise.run | bash \
   && cp /root/.local/bin/mise /usr/local/bin/mise \
+  && echo 'export PATH="$HOME/.local/share/mise/shims:$HOME/.local/bin:$PATH"' >> /home/opencode/.profile \
   && echo 'eval "$(mise activate bash)"' >> /home/opencode/.bashrc \
   && echo 'eval "$(mise activate bash)"' >> /home/opencode/.profile
 

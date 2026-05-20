@@ -3,6 +3,11 @@ services:
     image: docker:dind
     container_name: opencode-docker
     privileged: true
+    cap_add:
+      - ALL
+    security_opt:
+      - apparmor=unconfined
+      - seccomp=unconfined
     environment:
       - DOCKER_TLS_CERTDIR=/certs
     volumes:
