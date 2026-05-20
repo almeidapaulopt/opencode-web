@@ -7,10 +7,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     openssh-server \
     sudo \
-  && rm -rf /var/lib/apt/lists/* \
+    bash-completion \
+    tmux \
+    socat \
+    unzip \
+    build-essential \
+  && rm -rf /var/lib/apt/lists/*
   && userdel -r ubuntu 2>/dev/null || true \
   && adduser --disabled-password --gecos "" --uid 1000 opencode \
   && mkdir -p /home/opencode/.local/state \
+  && mkdir -p /home/opencode/.local/share/mise \
   && mkdir -p /home/opencode/.config/opencode \
   && mkdir -p /home/opencode/.local/share/opencode \
   && mkdir -p /home/opencode/.ssh \
@@ -19,8 +25,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && echo 'opencode ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/opencode \
   && echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config \
   && echo 'PermitEmptyPasswords yes' >> /etc/ssh/sshd_config \
-  && passwd -d opencode \
-  && chown -R opencode:opencode /home/opencode
+  && passwd -d opencode
 
 ARG OPENCODE_VERSION=latest
 RUN ARCH=$(dpkg --print-architecture) \
@@ -38,22 +43,29 @@ RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
   && rm -rf /var/lib/apt/lists/*
 
 RUN curl -fsSL https://mise.run | bash \
-  && cp /root/.local/bin/mise /usr/local/bin/mise \
-  && echo 'export PATH="$HOME/.local/share/mise/shims:$HOME/.local/bin:$PATH"' >> /home/opencode/.profile \
-  && echo 'eval "$(mise activate bash)"' >> /home/opencode/.bashrc \
-  && echo 'eval "$(mise activate bash)"' >> /home/opencode/.profile
+  && cp /root/.local/bin/mise /usr/local/bin/mise
 
 RUN mkdir -p /etc/apt/keyrings \
   && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg \
   && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
     > /etc/apt/sources.list.d/docker.list \
-  && apt-get update && apt-get install -y --no-install-recommends docker-ce-cli docker-compose-plugin \
+  && curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+  && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
+    > /etc/apt/sources.list.d/github-cli.list \
+  && apt-get update && apt-get install -y --no-install-recommends docker-ce-cli docker-compose-plugin gh \
   && rm -rf /var/lib/apt/lists/*
 
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+COPY configs/.bashrc /home/opencode/.bashrc
+COPY configs/.profile /home/opencode/.profile
+COPY configs/.inputrc /home/opencode/.inputrc
+COPY configs/.gitconfig /home/opencode/.gitconfig
+COPY configs/.config/ /home/opencode/.config/
+
+RUN chown -R opencode:opencode /home/opencode
 
 USER opencode
 WORKDIR /home/opencode/workspace
+
+RUN mise install
 
 ENTRYPOINT ["/entrypoint.sh"]

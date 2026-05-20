@@ -1,0 +1,39 @@
+[alias]
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
+	prune-local = "!git fetch --prune && git branch -vv | grep 'gone]' | awk '{print $1}' | xargs git branch -D"
+
+[init]
+	defaultBranch = master
+
+[pull]
+	rebase = true
+
+[push]
+	autoSetupRemote = true
+
+[diff]
+	algorithm = histogram
+	colorMoved = plain
+	mnemonicPrefix = true
+
+[commit]
+	verbose = true
+
+[column]
+	ui = auto
+
+[branch]
+	sort = -committerdate
+
+[tag]
+	sort = -version:refname
+
+[rerere]
+	enabled = true
+	autoupdate = true
+
+[url "git@github.com:"]
+	insteadOf = https://github.com/

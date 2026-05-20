@@ -1,0 +1,37 @@
+[tools]
+# Languages
+go = "latest"
+bun = "latest"
+node = "latest"
+
+# Editors
+neovim = "latest"
+
+# Go tools
+air = "latest"
+golangci-lint = "latest"
+golangci-lint-langserver = "latest"
+gomigrate = "latest"
+"go:golang.org/x/tools/cmd/goimports" = "latest"
+
+# CLI tools
+lazydocker = "latest"
+lazygit = "latest"
+lazyjournal = "latest"
+age = "latest"
+starship = "latest"
+zoxide = "latest"
+fzf = "latest"
+ripgrep = "latest"
+eza = "latest"
+bat = "latest"
+jq = "latest"
+btop = "latest"
+
+# AI tools
+codex = "latest"
+amp = "latest"
+gemini-cli = "latest"
+
+[settings]
+experimental = true

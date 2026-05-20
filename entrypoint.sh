@@ -8,5 +8,13 @@ for keytype in rsa ecdsa ed25519; do
   sudo cp "$keyfile" "/etc/ssh/ssh_host_${keytype}_key"
   sudo cp "${keyfile}.pub" "/etc/ssh/ssh_host_${keytype}_key.pub"
 done
+
+if [ -n "$GIT_USER_NAME" ]; then
+  git config --global user.name "$GIT_USER_NAME"
+fi
+if [ -n "$GIT_USER_EMAIL" ]; then
+  git config --global user.email "$GIT_USER_EMAIL"
+fi
+
 sudo /usr/sbin/sshd
 exec opencode "$@"
