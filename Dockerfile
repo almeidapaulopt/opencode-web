@@ -55,6 +55,7 @@ RUN mkdir -p /etc/apt/keyrings \
   && apt-get update && apt-get install -y --no-install-recommends docker-ce-cli docker-compose-plugin gh \
   && rm -rf /var/lib/apt/lists/*
 
+COPY entrypoint.sh /entrypoint.sh
 COPY configs/.bashrc /home/opencode/.bashrc
 COPY configs/.profile /home/opencode/.profile
 COPY configs/.inputrc /home/opencode/.inputrc

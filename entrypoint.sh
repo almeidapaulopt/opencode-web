@@ -17,4 +17,7 @@ if [ -n "$GIT_USER_EMAIL" ]; then
 fi
 
 sudo /usr/sbin/sshd
+
+export PATH="$HOME/.local/share/mise/shims:$HOME/.local/bin:$PATH"
+
 exec opencode "$@"
