@@ -1,4 +1,9 @@
 #!/bin/sh
+
+if [ -f /run/secrets/opencode_password ]; then
+  export OPENCODE_SERVER_PASSWORD="$(cat /run/secrets/opencode_password)"
+fi
+
 SSH_DIR="/home/opencode/.ssh"
 for keytype in rsa ecdsa ed25519; do
   keyfile="$SSH_DIR/ssh_host_${keytype}_key"
