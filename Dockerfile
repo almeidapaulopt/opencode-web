@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     socat \
     unzip \
     build-essential \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* \
   && userdel -r ubuntu 2>/dev/null || true \
   && adduser --disabled-password --gecos "" --uid 1000 opencode \
   && mkdir -p /home/opencode/.local/state \
